@@ -47,6 +47,9 @@ public interface BurotConfig extends Config {
 	@ConfigItem(keyName = "valuableDropThreshold", name = "Valuable Drop Threshold", description = "", position = 7, section = discordNotificationSection)
 	default int valuableDropThreshold() { return 5000000; }
 
+	@ConfigItem(keyName = "notifyQuest", name = "Notify Quest Completion", description = "", position = 8, section = discordNotificationSection)
+	default boolean notifyQuest() { return true; }
+
 	@ConfigItem(keyName = "notifyDiaryEasy", name = "Easy", description = "", position = 1, section = diaryTiersSection)
 	default boolean notifyDiaryEasy() { return true; }
 
@@ -115,4 +118,10 @@ public interface BurotConfig extends Config {
 
 	@ConfigItem(keyName = "valuableDropSoundPath", name = "Custom Valuable Drop Sound Path", description = "", position = 12, section = audioSettingsSection)
 	default String valuableDropSoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enableQuestSound", name = "Enable Quest Sound", description = "", position = 13, section = audioSettingsSection)
+	default boolean enableQuestSound() { return true; }
+
+	@ConfigItem(keyName = "questSoundPath", name = "Custom Quest Sound Path", description = "", position = 14, section = audioSettingsSection)
+	default String questSoundPath() { return ""; }
 }
