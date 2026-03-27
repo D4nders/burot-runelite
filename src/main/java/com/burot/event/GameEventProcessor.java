@@ -1,9 +1,10 @@
 package com.burot.event;
 
-import com.burot.notifier.Notifier;
 import com.burot.audio.AudioSource;
+import com.burot.notifier.Notifier;
 import com.burot.render.ChatSegment;
 import net.runelite.api.ChatMessageType;
+import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.ChatMessage;
 
 import java.awt.Color;
@@ -42,6 +43,9 @@ public abstract class GameEventProcessor {
 
         String sanitizedMessageContent = incomingChatMessage.getMessage().replaceAll("<[^>]+>", "");
         processSanitizedMessage(sanitizedMessageContent, activePlayerName, activeClanName, currentTick);
+    }
+
+    public void evaluateActorDeath(ActorDeath incomingDeathEvent, String activePlayerName, String activeClanName, int currentTick) {
     }
 
     protected List<ChatSegment> buildPlayerClanPrefixSegments(String activePlayerName, String activeClanName) {

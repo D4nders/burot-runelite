@@ -20,6 +20,7 @@ import net.runelite.api.Client;
 import net.runelite.api.Player;
 import net.runelite.api.clan.ClanChannel;
 import net.runelite.api.clan.ClanID;
+import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.client.audio.AudioPlayer;
 import net.runelite.client.config.ConfigManager;
@@ -73,7 +74,7 @@ public class BurotPlugin extends Plugin {
 
 		List<Notifier> instantiatedNotifiers = Arrays.asList(
 				new DiscordWebhookNotifier(pluginConfiguration, sharedNetworkClient),
-				new AudioNotifier(audioPlayer)
+				new AudioNotifier(audioPlayer, pluginConfiguration)
 		);
 
 		activeEventProcessors = Arrays.asList(
@@ -149,6 +150,26 @@ public class BurotPlugin extends Plugin {
 
 		for (GameEventProcessor targetedProcessor : activeEventProcessors) {
 			targetedProcessor.evaluateIncomingEvent(incomingChatMessage, activePlayerName, activeClanName, currentClientTick);
+		}
+	}
+
+	@Subscribe
+	public void onActorDeath(ActorDeath incomingDeathEvent) {
+		Player localPlayerEntity = gameClient.getLocalPlayer();
+
+		if (localPlayerEntity == null || incomingDeathEvent.getActor() != localPlayerEntity) {
+			return;
+		}
+
+		String activePlayerName = localPlayerEntity.getName();
+
+		ClanChannel activeClanChannel = gameClient.getClanChannel(ClanID.CLAN);
+		String activeClanName = (activeClanChannel != null) ? activeClanChannel.getName() : "";
+
+		int currentClientTick = gameClient.getTickCount();
+
+		for (GameEventProcessor targetedProcessor : activeEventProcessors) {
+			targetedProcessor.evaluateActorDeath(incomingDeathEvent, activePlayerName, activeClanName, currentClientTick);
 		}
 	}
 }

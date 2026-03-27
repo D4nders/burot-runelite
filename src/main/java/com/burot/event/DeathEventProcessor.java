@@ -6,6 +6,9 @@ import com.burot.audio.AudioSourceResolver;
 import com.burot.notifier.Notifier;
 import com.burot.render.ChatSegment;
 import com.burot.render.ChatboxImageGenerator;
+import net.runelite.api.Actor;
+import net.runelite.api.Player;
+import net.runelite.api.events.ActorDeath;
 
 import java.awt.Color;
 import java.util.List;
@@ -19,6 +22,8 @@ public class DeathEventProcessor extends GameEventProcessor {
 
     private final BurotConfig pluginConfiguration;
     private final ChatboxImageGenerator imageGenerator;
+
+    private int lastDeathTick = -1;
 
     public DeathEventProcessor(List<Notifier> registeredNotifiers, BurotConfig pluginConfiguration) {
         super(registeredNotifiers);
@@ -47,6 +52,27 @@ public class DeathEventProcessor extends GameEventProcessor {
     }
 
     @Override
+    public void evaluateActorDeath(ActorDeath incomingDeathEvent, String activePlayerName, String activeClanName, int currentTick) {
+        if (!isEventEnabled()) {
+            return;
+        }
+
+        lastDeathTick = currentTick;
+
+        Actor interactingActor = incomingDeathEvent.getActor().getInteracting();
+        boolean isPvpDeath = interactingActor instanceof Player;
+
+        if (isPvpDeath) {
+            return;
+        }
+
+        if (pluginConfiguration.notifyDeathMonster()) {
+            String killerName = (interactingActor != null && interactingActor.getName() != null) ? interactingActor.getName() : "a monster";
+            executeActorDeathSequence(activePlayerName, activeClanName, killerName);
+        }
+    }
+
+    @Override
     protected void processSanitizedMessage(String sanitizedMessageContent, String activePlayerName, String activeClanName, int currentTick) {
         Matcher pvpMatcher = PVP_DEATH_PATTERN.matcher(sanitizedMessageContent);
         if (pvpMatcher.find()) {
@@ -63,10 +89,24 @@ public class DeathEventProcessor extends GameEventProcessor {
         if (pveMatcher.find()) {
             if (pluginConfiguration.notifyDeathMonster()) {
                 String defeatedPlayer = pveMatcher.group(1);
+
+                if (defeatedPlayer.replaceAll("\u00A0", " ").equalsIgnoreCase(activePlayerName) && (currentTick - lastDeathTick) < 10) {
+                    return;
+                }
+
                 String killerName = pveMatcher.group(2);
                 executePveNotificationSequence(defeatedPlayer, activeClanName, killerName);
             }
         }
+    }
+
+    private void executeActorDeathSequence(String defeatedPlayer, String activeClanName, String killerName) {
+        List<ChatSegment> notificationSegments = buildPlayerClanPrefixSegments(defeatedPlayer, activeClanName);
+        notificationSegments.add(new ChatSegment("has been defeated by ", Color.BLACK));
+        notificationSegments.add(new ChatSegment(killerName, new Color(127, 0, 0)));
+        notificationSegments.add(new ChatSegment(".", Color.BLACK));
+
+        dispatchResolvedNotification(notificationSegments);
     }
 
     private void executePvpNotificationSequence(String defeatedPlayer, String activeClanName, String killerName, String valueLost) {

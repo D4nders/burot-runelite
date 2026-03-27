@@ -4,6 +4,7 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
+import net.runelite.client.config.Range;
 
 @ConfigGroup("burot")
 public interface BurotConfig extends Config {
@@ -32,7 +33,11 @@ public interface BurotConfig extends Config {
 	@ConfigItem(keyName = "devMode", name = "Enable Developer Mode", description = "", position = 0)
 	default boolean devMode() { return false; }
 
-	@ConfigItem(keyName = "universalSoundMute", name = "Universal Sound Mute", description = "", position = 0, section = audioSettingsSection)
+	@Range(min = 0, max = 100)
+	@ConfigItem(keyName = "notificationVolume", name = "Notification Volume", description = "", position = 0, section = audioSettingsSection)
+	default int notificationVolume() { return 10; }
+
+	@ConfigItem(keyName = "universalSoundMute", name = "Universal Sound Mute", description = "", position = 1, section = audioSettingsSection)
 	default boolean universalSoundMute() { return false; }
 
 	@ConfigItem(keyName = "webhookUrl", name = "Discord Webhook URL", description = "", position = 1, section = discordNotificationSection)
@@ -96,7 +101,7 @@ public interface BurotConfig extends Config {
 	default boolean notifyDeathPlayer() { return true; }
 
 	@ConfigItem(keyName = "notifyDeathMonster", name = "To Monster", description = "", position = 2, section = deathSection)
-	default boolean notifyDeathMonster() { return false; }
+	default boolean notifyDeathMonster() { return true; }
 
 	@ConfigItem(keyName = "notifyKillPlayer", name = "Player Kill (Value Gained)", description = "", position = 1, section = killSection)
 	default boolean notifyKillPlayer() { return false; }
