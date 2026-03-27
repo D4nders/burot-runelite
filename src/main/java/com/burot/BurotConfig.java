@@ -74,6 +74,17 @@ public interface BurotConfig extends Config {
 	}
 
 	@ConfigItem(
+			keyName = "notifyPet",
+			name = "Notify Pet (Funny Feeling)",
+			description = "",
+			position = 4,
+			section = discordNotificationSection
+	)
+	default boolean notifyPet() {
+		return true;
+	}
+
+	@ConfigItem(
 			keyName = "notifyDiaryEasy",
 			name = "Easy",
 			description = "",
@@ -158,6 +169,28 @@ public interface BurotConfig extends Config {
 			section = audioSettingsSection
 	)
 	default String diarySoundPath() {
+		return "";
+	}
+
+	@ConfigItem(
+			keyName = "enablePetSound",
+			name = "Enable Pet Sound",
+			description = "",
+			position = 5,
+			section = audioSettingsSection
+	)
+	default boolean enablePetSound() {
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "petSoundPath",
+			name = "Custom Pet Sound Path",
+			description = "",
+			position = 6,
+			section = audioSettingsSection
+	)
+	default String petSoundPath() {
 		return "";
 	}
 }

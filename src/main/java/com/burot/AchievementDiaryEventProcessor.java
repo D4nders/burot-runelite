@@ -62,7 +62,7 @@ public class AchievementDiaryEventProcessor extends GameEventProcessor {
     }
 
     @Override
-    public void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName, String activeClanName) {
+    public void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName, String activeClanName, int currentTick) {
         if (!pluginConfiguration.notifyAchievementDiary()) {
             return;
         }

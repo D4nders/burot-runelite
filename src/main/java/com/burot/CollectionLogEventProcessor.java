@@ -16,10 +16,12 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
 
     private final BurotConfig pluginConfiguration;
     private final ChatboxImageGenerator imageGenerator;
+    private final SharedEventState sharedEventState;
 
-    public CollectionLogEventProcessor(List<Notifier> registeredNotifiers, BurotConfig pluginConfiguration) {
+    public CollectionLogEventProcessor(List<Notifier> registeredNotifiers, BurotConfig pluginConfiguration, SharedEventState sharedEventState) {
         super(registeredNotifiers);
         this.pluginConfiguration = pluginConfiguration;
+        this.sharedEventState = sharedEventState;
         this.imageGenerator = new ChatboxImageGenerator();
     }
 
@@ -48,8 +50,12 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
     }
 
     @Override
-    public void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName, String activeClanName) {
+    public void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName, String activeClanName, int currentTick) {
         if (!pluginConfiguration.notifyCollectionLog()) {
+            return;
+        }
+
+        if (sharedEventState.isWithinPetDropWindow(currentTick)) {
             return;
         }
 

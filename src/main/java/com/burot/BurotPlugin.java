@@ -51,13 +51,16 @@ public class BurotPlugin extends Plugin {
 
 	@Override
 	protected void startUp() {
+		SharedEventState sharedEventState = new SharedEventState();
+
 		List<Notifier> instantiatedNotifiers = Arrays.asList(
 				new DiscordWebhookNotifier(pluginConfiguration, sharedNetworkClient),
 				new AudioNotifier()
 		);
 
 		activeEventProcessors = Arrays.asList(
-				new CollectionLogEventProcessor(instantiatedNotifiers, pluginConfiguration),
+				new PetEventProcessor(instantiatedNotifiers, pluginConfiguration, sharedEventState),
+				new CollectionLogEventProcessor(instantiatedNotifiers, pluginConfiguration, sharedEventState),
 				new AchievementDiaryEventProcessor(instantiatedNotifiers, pluginConfiguration)
 		);
 
@@ -117,8 +120,10 @@ public class BurotPlugin extends Plugin {
 		ClanChannel activeClanChannel = gameClient.getClanChannel(ClanID.CLAN);
 		String activeClanName = (activeClanChannel != null) ? activeClanChannel.getName() : "";
 
+		int currentClientTick = gameClient.getTickCount();
+
 		for (GameEventProcessor targetedProcessor : activeEventProcessors) {
-			targetedProcessor.evaluateIncomingEvent(incomingChatMessage, activePlayerName, activeClanName);
+			targetedProcessor.evaluateIncomingEvent(incomingChatMessage, activePlayerName, activeClanName, currentClientTick);
 		}
 	}
 }
