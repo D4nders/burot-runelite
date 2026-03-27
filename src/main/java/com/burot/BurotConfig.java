@@ -55,13 +55,24 @@ public interface BurotConfig extends Config {
 	}
 
 	@ConfigItem(
-			keyName = "collectionLogSoundPath",
-			name = "Collection Log Sound Path",
+			keyName = "enableCollectionLogSound",
+			name = "Enable Collection Log Sound",
 			description = "",
 			position = 1,
 			section = audioSettingsSection
 	)
+	default boolean enableCollectionLogSound() {
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "collectionLogSoundPath",
+			name = "Custom Collection Log Sound Path",
+			description = "",
+			position = 2,
+			section = audioSettingsSection
+	)
 	default String collectionLogSoundPath() {
-		return "C:/sounds/collectionlog.wav";
+		return "";
 	}
 }

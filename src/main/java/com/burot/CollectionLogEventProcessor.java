@@ -3,11 +3,11 @@ package com.burot;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.events.ChatMessage;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.awt.Color;
 
 public class CollectionLogEventProcessor extends GameEventProcessor {
 
@@ -28,11 +28,23 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
         return "Collection Log";
     }
 
+    private AudioSource determineAudioSource() {
+        if (!pluginConfiguration.enableCollectionLogSound()) {
+            return new DisabledAudioSource();
+        }
+
+        String customAudioPath = pluginConfiguration.collectionLogSoundPath();
+        if (customAudioPath == null || customAudioPath.trim().isEmpty()) {
+            return new InternalAudioSource("/collectionlog.wav");
+        }
+
+        return new FileAudioSource(customAudioPath);
+    }
+
     @Override
     public void simulateEventExecution(String activePlayerName) {
         String simulatedItemName = "Rotten potato";
         String simulatedProgress = " (291/1699)";
-        String configuredSoundPath = pluginConfiguration.collectionLogSoundPath();
 
         List<ChatSegment> notificationSegments = new ArrayList<>();
         notificationSegments.add(new ChatSegment("[Burot] ", Color.BLUE));
@@ -42,8 +54,9 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
         notificationSegments.add(new ChatSegment(simulatedProgress, Color.BLACK));
 
         byte[] renderedImagePayload = imageGenerator.generateChatboxImage(notificationSegments);
+        AudioSource eventAudioSource = determineAudioSource();
 
-        triggerAllNotifiers("", configuredSoundPath, renderedImagePayload);
+        triggerAllNotifiers("", eventAudioSource, renderedImagePayload);
     }
 
     @Override
@@ -72,8 +85,6 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
                 extractedProgress = progressMatcher.group(2);
             }
 
-            String configuredSoundPath = pluginConfiguration.collectionLogSoundPath();
-
             List<ChatSegment> notificationSegments = new ArrayList<>();
             notificationSegments.add(new ChatSegment("[Burot] ", Color.BLUE));
             notificationSegments.add(new ChatSegment(activePlayerName + " ", Color.BLACK));
@@ -85,8 +96,9 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
             }
 
             byte[] renderedImagePayload = imageGenerator.generateChatboxImage(notificationSegments);
+            AudioSource eventAudioSource = determineAudioSource();
 
-            triggerAllNotifiers("", configuredSoundPath, renderedImagePayload);
+            triggerAllNotifiers("", eventAudioSource, renderedImagePayload);
         }
     }
 }

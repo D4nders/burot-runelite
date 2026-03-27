@@ -22,7 +22,7 @@ public class DiscordWebhookNotifier implements Notifier {
     }
 
     @Override
-    public void dispatchNotification(String formattedEventText, String targetSoundFilePath, byte[] generatedImageData) {
+    public void dispatchNotification(String formattedEventText, AudioSource targetAudioSource, byte[] generatedImageData) {
         String targetWebhookUrl = pluginConfiguration.webhookUrl();
 
         if (targetWebhookUrl == null || targetWebhookUrl.isEmpty()) {

@@ -1,7 +1,6 @@
 package com.burot;
 
 import net.runelite.api.events.ChatMessage;
-
 import java.util.List;
 
 public abstract class GameEventProcessor {
@@ -18,9 +17,9 @@ public abstract class GameEventProcessor {
 
     public abstract void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName);
 
-    protected void triggerAllNotifiers(String notificationText, String associatedSoundPath, byte[] generatedImageData) {
+    protected void triggerAllNotifiers(String notificationText, AudioSource eventAudioSource, byte[] generatedImageData) {
         for (Notifier currentNotifier : registeredNotifiers) {
-            currentNotifier.dispatchNotification(notificationText, associatedSoundPath, generatedImageData);
+            currentNotifier.dispatchNotification(notificationText, eventAudioSource, generatedImageData);
         }
     }
 }

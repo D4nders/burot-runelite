@@ -3,23 +3,20 @@ package com.burot;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import java.io.File;
 
 public class AudioNotifier implements Notifier {
 
     @Override
-    public void dispatchNotification(String formattedEventText, String targetSoundFilePath, byte[] generatedImageData) {
-        if (targetSoundFilePath == null || targetSoundFilePath.isEmpty()) {
+    public void dispatchNotification(String formattedEventText, AudioSource targetAudioSource, byte[] generatedImageData) {
+        if (targetAudioSource == null) {
             return;
         }
 
         try {
-            File targetAudioFile = new File(targetSoundFilePath);
+            AudioInputStream activeAudioStream = targetAudioSource.retrieveAudioStream();
 
-            if (targetAudioFile.exists()) {
-                AudioInputStream activeAudioStream = AudioSystem.getAudioInputStream(targetAudioFile);
+            if (activeAudioStream != null) {
                 Clip audioPlaybackClip = AudioSystem.getClip();
-
                 audioPlaybackClip.open(activeAudioStream);
                 audioPlaybackClip.start();
             }
