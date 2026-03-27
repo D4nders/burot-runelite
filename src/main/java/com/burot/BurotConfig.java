@@ -8,45 +8,20 @@ import net.runelite.client.config.ConfigSection;
 @ConfigGroup("burot")
 public interface BurotConfig extends Config {
 
-	@ConfigSection(
-			name = "Discord Notifications",
-			description = "",
-			position = 1
-	)
+	@ConfigSection(name = "Discord Notifications", description = "", position = 1)
 	String discordNotificationSection = "discordNotificationSection";
 
-	@ConfigSection(
-			name = "Audio Settings",
-			description = "",
-			position = 2
-	)
+	@ConfigSection(name = "Audio Settings", description = "", position = 2)
 	String audioSettingsSection = "audioSettingsSection";
 
-	@ConfigSection(
-			name = "Achievement Diary Tiers",
-			description = "",
-			position = 3,
-			closedByDefault = true
-	)
+	@ConfigSection(name = "Achievement Diary Tiers", description = "", position = 3, closedByDefault = true)
 	String diaryTiersSection = "diaryTiersSection";
 
-	@ConfigSection(
-			name = "Combat Achievement Tiers",
-			description = "",
-			position = 4,
-			closedByDefault = true
-	)
+	@ConfigSection(name = "Combat Achievement Tiers", description = "", position = 4, closedByDefault = true)
 	String combatTiersSection = "combatTiersSection";
 
-	@ConfigItem(
-			keyName = "devMode",
-			name = "Enable Developer Mode",
-			description = "",
-			position = 0
-	)
-	default boolean devMode() {
-		return false;
-	}
+	@ConfigItem(keyName = "devMode", name = "Enable Developer Mode", description = "", position = 0)
+	default boolean devMode() { return false; }
 
 	@ConfigItem(keyName = "webhookUrl", name = "Discord Webhook URL", description = "", position = 1, section = discordNotificationSection)
 	default String webhookUrl() { return ""; }
@@ -62,6 +37,12 @@ public interface BurotConfig extends Config {
 
 	@ConfigItem(keyName = "notifyCombatAchievement", name = "Notify Combat Achievement", description = "", position = 5, section = discordNotificationSection)
 	default boolean notifyCombatAchievement() { return true; }
+
+	@ConfigItem(keyName = "notifyValuableDrop", name = "Notify Valuable Drop", description = "", position = 6, section = discordNotificationSection)
+	default boolean notifyValuableDrop() { return true; }
+
+	@ConfigItem(keyName = "valuableDropThreshold", name = "Valuable Drop Threshold", description = "", position = 7, section = discordNotificationSection)
+	default int valuableDropThreshold() { return 5000000; }
 
 	@ConfigItem(keyName = "notifyDiaryEasy", name = "Easy", description = "", position = 1, section = diaryTiersSection)
 	default boolean notifyDiaryEasy() { return true; }
@@ -125,4 +106,10 @@ public interface BurotConfig extends Config {
 
 	@ConfigItem(keyName = "combatTierSoundPath", name = "Custom Combat Tier Sound Path", description = "", position = 10, section = audioSettingsSection)
 	default String combatTierSoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enableValuableDropSound", name = "Enable Valuable Drop Sound", description = "", position = 11, section = audioSettingsSection)
+	default boolean enableValuableDropSound() { return true; }
+
+	@ConfigItem(keyName = "valuableDropSoundPath", name = "Custom Valuable Drop Sound Path", description = "", position = 12, section = audioSettingsSection)
+	default String valuableDropSoundPath() { return ""; }
 }

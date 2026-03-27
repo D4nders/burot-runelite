@@ -5,6 +5,7 @@ import com.burot.event.CollectionLogEventProcessor;
 import com.burot.event.CombatAchievementEventProcessor;
 import com.burot.event.GameEventProcessor;
 import com.burot.event.PetEventProcessor;
+import com.burot.event.ValuableDropEventProcessor;
 import com.burot.notifier.AudioNotifier;
 import com.burot.notifier.DiscordWebhookNotifier;
 import com.burot.notifier.Notifier;
@@ -70,7 +71,8 @@ public class BurotPlugin extends Plugin {
 				new PetEventProcessor(instantiatedNotifiers, pluginConfiguration, sharedEventState),
 				new CollectionLogEventProcessor(instantiatedNotifiers, pluginConfiguration, sharedEventState),
 				new AchievementDiaryEventProcessor(instantiatedNotifiers, pluginConfiguration),
-				new CombatAchievementEventProcessor(instantiatedNotifiers, pluginConfiguration)
+				new CombatAchievementEventProcessor(instantiatedNotifiers, pluginConfiguration),
+				new ValuableDropEventProcessor(instantiatedNotifiers, pluginConfiguration, sharedEventState)
 		);
 
 		initializeDevModeInterface();

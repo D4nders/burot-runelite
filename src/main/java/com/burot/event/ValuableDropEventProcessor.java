@@ -1,13 +1,14 @@
 package com.burot.event;
 
-import com.burot.*;
+import com.burot.BurotConfig;
+import com.burot.SharedEventState;
 import com.burot.audio.AudioSource;
 import com.burot.audio.DisabledAudioSource;
 import com.burot.audio.FileAudioSource;
 import com.burot.audio.InternalAudioSource;
 import com.burot.notifier.Notifier;
-import com.burot.render.ChatSegment;
 import com.burot.render.ChatboxImageGenerator;
+import com.burot.render.ChatSegment;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.events.ChatMessage;
 
@@ -17,15 +18,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PetEventProcessor extends GameEventProcessor {
+public class ValuableDropEventProcessor extends GameEventProcessor {
 
-    private static final Pattern PET_DETECTION_PATTERN = Pattern.compile("(You have a funny feeling.*|You feel something weird sneaking into your backpack.*)");
+    private static final Pattern VALUABLE_DROP_PATTERN = Pattern.compile("Valuable drop: (.*?) \\(([0-9,]+) coins\\)");
 
     private final BurotConfig pluginConfiguration;
     private final ChatboxImageGenerator imageGenerator;
     private final SharedEventState sharedEventState;
 
-    public PetEventProcessor(List<Notifier> registeredNotifiers, BurotConfig pluginConfiguration, SharedEventState sharedEventState) {
+    public ValuableDropEventProcessor(List<Notifier> registeredNotifiers, BurotConfig pluginConfiguration, SharedEventState sharedEventState) {
         super(registeredNotifiers);
         this.pluginConfiguration = pluginConfiguration;
         this.sharedEventState = sharedEventState;
@@ -34,17 +35,17 @@ public class PetEventProcessor extends GameEventProcessor {
 
     @Override
     public String retrieveProcessorName() {
-        return "Pet Drop";
+        return "Valuable Drop";
     }
 
     private AudioSource determineAudioSource() {
-        if (!pluginConfiguration.enablePetSound()) {
+        if (!pluginConfiguration.enableValuableDropSound()) {
             return new DisabledAudioSource();
         }
 
-        String customAudioPath = pluginConfiguration.petSoundPath();
+        String customAudioPath = pluginConfiguration.valuableDropSoundPath();
         if (customAudioPath == null || customAudioPath.trim().isEmpty()) {
-            return new InternalAudioSource("/pet.wav");
+            return new InternalAudioSource("/valuabledrop.wav");
         }
 
         return new FileAudioSource(customAudioPath);
@@ -52,17 +53,21 @@ public class PetEventProcessor extends GameEventProcessor {
 
     @Override
     public void simulateEventExecution(String activePlayerName, String activeClanName) {
-        if (!pluginConfiguration.notifyPet()) {
+        if (!pluginConfiguration.notifyValuableDrop()) {
             return;
         }
 
-        String simulatedMessageContent = "You have a funny feeling like you're being followed: blobfish at 69 M xp.";
+        String simulatedMessageContent = "Valuable drop: Mike Tyson's front teeth (420,000,000 coins)";
         processRawMessage(simulatedMessageContent, activePlayerName, activeClanName, -1);
     }
 
     @Override
     public void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName, String activeClanName, int currentTick) {
-        if (!pluginConfiguration.notifyPet()) {
+        if (!pluginConfiguration.notifyValuableDrop()) {
+            return;
+        }
+
+        if (sharedEventState.isWithinCollectionLogWindow(currentTick)) {
             return;
         }
 
@@ -77,23 +82,23 @@ public class PetEventProcessor extends GameEventProcessor {
 
     private void processRawMessage(String rawMessageContent, String activePlayerName, String activeClanName, int currentTick) {
         String sanitizedMessageContent = rawMessageContent.replaceAll("<[^>]+>", "");
-        Matcher patternMatcher = PET_DETECTION_PATTERN.matcher(sanitizedMessageContent);
+        Matcher patternMatcher = VALUABLE_DROP_PATTERN.matcher(sanitizedMessageContent);
 
         if (patternMatcher.find()) {
-            if (currentTick != -1) {
-                sharedEventState.registerPetDrop(currentTick);
-            }
+            String extractedItem = patternMatcher.group(1);
+            String extractedValueString = patternMatcher.group(2);
 
-            String extractedPetMessage = patternMatcher.group(1);
-            executeNotificationSequence(activePlayerName, activeClanName, extractedPetMessage);
+            try {
+                long dropValue = Long.parseLong(extractedValueString.replace(",", ""));
+                if (dropValue >= pluginConfiguration.valuableDropThreshold()) {
+                    executeNotificationSequence(activePlayerName, activeClanName, extractedItem, extractedValueString);
+                }
+            } catch (NumberFormatException ignoredException) {
+            }
         }
     }
 
-    private void executeNotificationSequence(String activePlayerName, String activeClanName, String petMessageContent) {
-        String formattedPetMessage = petMessageContent
-                .replace("You have a funny feeling like you're", "has a funny feeling like they're")
-                .replace("You feel something weird sneaking into your", "feels something weird sneaking into their");
-
+    private void executeNotificationSequence(String activePlayerName, String activeClanName, String targetItem, String targetValue) {
         List<ChatSegment> notificationSegments = new ArrayList<>();
 
         if (activeClanName != null && !activeClanName.isEmpty()) {
@@ -101,7 +106,8 @@ public class PetEventProcessor extends GameEventProcessor {
         }
 
         notificationSegments.add(new ChatSegment(activePlayerName + " ", Color.BLACK));
-        notificationSegments.add(new ChatSegment(formattedPetMessage, new Color(127, 0, 0)));
+        notificationSegments.add(new ChatSegment("received a drop: ", Color.BLACK));
+        notificationSegments.add(new ChatSegment(targetItem + " (" + targetValue + " coins).", Color.BLACK));
 
         byte[] renderedImagePayload = imageGenerator.generateChatboxImage(notificationSegments);
         AudioSource eventAudioSource = determineAudioSource();

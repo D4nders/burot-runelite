@@ -3,9 +3,11 @@ package com.burot;
 public class SharedEventState {
 
     private int lastPetDropTick;
+    private int lastCollectionLogTick;
 
     public SharedEventState() {
         this.lastPetDropTick = -1;
+        this.lastCollectionLogTick = -1;
     }
 
     public void registerPetDrop(int currentTick) {
@@ -14,5 +16,13 @@ public class SharedEventState {
 
     public boolean isWithinPetDropWindow(int currentTick) {
         return lastPetDropTick != -1 && (currentTick - lastPetDropTick) <= 2;
+    }
+
+    public void registerCollectionLogDrop(int currentTick) {
+        this.lastCollectionLogTick = currentTick;
+    }
+
+    public boolean isWithinCollectionLogWindow(int currentTick) {
+        return lastCollectionLogTick != -1 && (currentTick - lastCollectionLogTick) <= 2;
     }
 }

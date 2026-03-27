@@ -1,13 +1,14 @@
 package com.burot.event;
 
-import com.burot.*;
+import com.burot.BurotConfig;
+import com.burot.SharedEventState;
 import com.burot.audio.AudioSource;
 import com.burot.audio.DisabledAudioSource;
 import com.burot.audio.FileAudioSource;
 import com.burot.audio.InternalAudioSource;
 import com.burot.notifier.Notifier;
-import com.burot.render.ChatSegment;
 import com.burot.render.ChatboxImageGenerator;
+import com.burot.render.ChatSegment;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.events.ChatMessage;
 
@@ -53,8 +54,12 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
 
     @Override
     public void simulateEventExecution(String activePlayerName, String activeClanName) {
+        if (!pluginConfiguration.notifyCollectionLog()) {
+            return;
+        }
+
         String simulatedMessageContent = "New item added to your collection log: Rotten potato (291/1699)";
-        processRawMessage(simulatedMessageContent, activePlayerName, activeClanName);
+        processRawMessage(simulatedMessageContent, activePlayerName, activeClanName, -1);
     }
 
     @Override
@@ -73,14 +78,18 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
         }
 
         String rawMessageContent = incomingChatMessage.getMessage();
-        processRawMessage(rawMessageContent, activePlayerName, activeClanName);
+        processRawMessage(rawMessageContent, activePlayerName, activeClanName, currentTick);
     }
 
-    private void processRawMessage(String rawMessageContent, String activePlayerName, String activeClanName) {
+    private void processRawMessage(String rawMessageContent, String activePlayerName, String activeClanName, int currentTick) {
         String sanitizedMessageContent = rawMessageContent.replaceAll("<[^>]+>", "");
         Matcher patternMatcher = COLLECTION_LOG_DETECTION_PATTERN.matcher(sanitizedMessageContent);
 
         if (patternMatcher.find()) {
+            if (currentTick != -1) {
+                sharedEventState.registerCollectionLogDrop(currentTick);
+            }
+
             String extractedContent = patternMatcher.group(1);
             String extractedItemName = extractedContent;
             String extractedProgress = "";

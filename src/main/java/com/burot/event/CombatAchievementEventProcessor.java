@@ -79,6 +79,10 @@ public class CombatAchievementEventProcessor extends GameEventProcessor {
 
     @Override
     public void simulateEventExecution(String activePlayerName, String activeClanName) {
+        if (!pluginConfiguration.notifyCombatAchievement()) {
+            return;
+        }
+
         String simulatedTaskContent = "Congratulations, you've completed a medium combat task: Efficient Pest Control (2 points).";
         processRawMessage(simulatedTaskContent, activePlayerName, activeClanName, -1);
 

@@ -65,6 +65,10 @@ public class AchievementDiaryEventProcessor extends GameEventProcessor {
 
     @Override
     public void simulateEventExecution(String activePlayerName, String activeClanName) {
+        if (!pluginConfiguration.notifyAchievementDiary()) {
+            return;
+        }
+
         String simulatedMessageContent = "Congratulations! You have completed all of the hard tasks in the Ardougne area.";
         processRawMessage(simulatedMessageContent, activePlayerName, activeClanName);
     }
