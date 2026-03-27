@@ -8,6 +8,8 @@ import javax.sound.sampled.Clip;
 
 public class AudioNotifier implements Notifier {
 
+    private Clip activePlaybackClip;
+
     @Override
     public void dispatchNotification(String formattedEventText, AudioSource targetAudioSource, byte[] generatedImageData) {
         if (targetAudioSource == null) {
@@ -18,9 +20,16 @@ public class AudioNotifier implements Notifier {
             AudioInputStream activeAudioStream = targetAudioSource.retrieveAudioStream();
 
             if (activeAudioStream != null) {
-                Clip audioPlaybackClip = AudioSystem.getClip();
-                audioPlaybackClip.open(activeAudioStream);
-                audioPlaybackClip.start();
+                if (activePlaybackClip != null) {
+                    if (activePlaybackClip.isRunning()) {
+                        activePlaybackClip.stop();
+                    }
+                    activePlaybackClip.close();
+                }
+
+                activePlaybackClip = AudioSystem.getClip();
+                activePlaybackClip.open(activeAudioStream);
+                activePlaybackClip.start();
             }
         } catch (Exception ignoredException) {
         }

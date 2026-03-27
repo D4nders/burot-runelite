@@ -2,6 +2,7 @@ package com.burot;
 
 import com.burot.event.AchievementDiaryEventProcessor;
 import com.burot.event.CollectionLogEventProcessor;
+import com.burot.event.CombatAchievementEventProcessor;
 import com.burot.event.GameEventProcessor;
 import com.burot.event.PetEventProcessor;
 import com.burot.notifier.AudioNotifier;
@@ -68,7 +69,8 @@ public class BurotPlugin extends Plugin {
 		activeEventProcessors = Arrays.asList(
 				new PetEventProcessor(instantiatedNotifiers, pluginConfiguration, sharedEventState),
 				new CollectionLogEventProcessor(instantiatedNotifiers, pluginConfiguration, sharedEventState),
-				new AchievementDiaryEventProcessor(instantiatedNotifiers, pluginConfiguration)
+				new AchievementDiaryEventProcessor(instantiatedNotifiers, pluginConfiguration),
+				new CombatAchievementEventProcessor(instantiatedNotifiers, pluginConfiguration)
 		);
 
 		initializeDevModeInterface();

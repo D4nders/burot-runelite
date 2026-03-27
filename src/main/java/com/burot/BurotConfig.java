@@ -30,6 +30,14 @@ public interface BurotConfig extends Config {
 	)
 	String diaryTiersSection = "diaryTiersSection";
 
+	@ConfigSection(
+			name = "Combat Achievement Tiers",
+			description = "",
+			position = 4,
+			closedByDefault = true
+	)
+	String combatTiersSection = "combatTiersSection";
+
 	@ConfigItem(
 			keyName = "devMode",
 			name = "Enable Developer Mode",
@@ -40,157 +48,81 @@ public interface BurotConfig extends Config {
 		return false;
 	}
 
-	@ConfigItem(
-			keyName = "webhookUrl",
-			name = "Discord Webhook URL",
-			description = "",
-			position = 1,
-			section = discordNotificationSection
-	)
-	default String webhookUrl() {
-		return "";
-	}
+	@ConfigItem(keyName = "webhookUrl", name = "Discord Webhook URL", description = "", position = 1, section = discordNotificationSection)
+	default String webhookUrl() { return ""; }
 
-	@ConfigItem(
-			keyName = "notifyCollectionLog",
-			name = "Notify Collection Log",
-			description = "",
-			position = 2,
-			section = discordNotificationSection
-	)
-	default boolean notifyCollectionLog() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyCollectionLog", name = "Notify Collection Log", description = "", position = 2, section = discordNotificationSection)
+	default boolean notifyCollectionLog() { return true; }
 
-	@ConfigItem(
-			keyName = "notifyAchievementDiary",
-			name = "Notify Achievement Diary",
-			description = "",
-			position = 3,
-			section = discordNotificationSection
-	)
-	default boolean notifyAchievementDiary() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyAchievementDiary", name = "Notify Achievement Diary", description = "", position = 3, section = discordNotificationSection)
+	default boolean notifyAchievementDiary() { return true; }
 
-	@ConfigItem(
-			keyName = "notifyPet",
-			name = "Notify Pet (Funny Feeling)",
-			description = "",
-			position = 4,
-			section = discordNotificationSection
-	)
-	default boolean notifyPet() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyPet", name = "Notify Pet (Funny Feeling)", description = "", position = 4, section = discordNotificationSection)
+	default boolean notifyPet() { return true; }
 
-	@ConfigItem(
-			keyName = "notifyDiaryEasy",
-			name = "Easy",
-			description = "",
-			position = 1,
-			section = diaryTiersSection
-	)
-	default boolean notifyDiaryEasy() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyCombatAchievement", name = "Notify Combat Achievement", description = "", position = 5, section = discordNotificationSection)
+	default boolean notifyCombatAchievement() { return true; }
 
-	@ConfigItem(
-			keyName = "notifyDiaryMedium",
-			name = "Medium",
-			description = "",
-			position = 2,
-			section = diaryTiersSection
-	)
-	default boolean notifyDiaryMedium() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyDiaryEasy", name = "Easy", description = "", position = 1, section = diaryTiersSection)
+	default boolean notifyDiaryEasy() { return true; }
 
-	@ConfigItem(
-			keyName = "notifyDiaryHard",
-			name = "Hard",
-			description = "",
-			position = 3,
-			section = diaryTiersSection
-	)
-	default boolean notifyDiaryHard() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyDiaryMedium", name = "Medium", description = "", position = 2, section = diaryTiersSection)
+	default boolean notifyDiaryMedium() { return true; }
 
-	@ConfigItem(
-			keyName = "notifyDiaryElite",
-			name = "Elite",
-			description = "",
-			position = 4,
-			section = diaryTiersSection
-	)
-	default boolean notifyDiaryElite() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyDiaryHard", name = "Hard", description = "", position = 3, section = diaryTiersSection)
+	default boolean notifyDiaryHard() { return true; }
 
-	@ConfigItem(
-			keyName = "enableCollectionLogSound",
-			name = "Enable Collection Log Sound",
-			description = "",
-			position = 1,
-			section = audioSettingsSection
-	)
-	default boolean enableCollectionLogSound() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyDiaryElite", name = "Elite", description = "", position = 4, section = diaryTiersSection)
+	default boolean notifyDiaryElite() { return true; }
 
-	@ConfigItem(
-			keyName = "collectionLogSoundPath",
-			name = "Custom Collection Log Sound Path",
-			description = "",
-			position = 2,
-			section = audioSettingsSection
-	)
-	default String collectionLogSoundPath() {
-		return "";
-	}
+	@ConfigItem(keyName = "notifyCombatEasy", name = "Easy", description = "", position = 1, section = combatTiersSection)
+	default boolean notifyCombatEasy() { return false; }
 
-	@ConfigItem(
-			keyName = "enableDiarySound",
-			name = "Enable Diary Sound",
-			description = "",
-			position = 3,
-			section = audioSettingsSection
-	)
-	default boolean enableDiarySound() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyCombatMedium", name = "Medium", description = "", position = 2, section = combatTiersSection)
+	default boolean notifyCombatMedium() { return false; }
 
-	@ConfigItem(
-			keyName = "diarySoundPath",
-			name = "Custom Diary Sound Path",
-			description = "",
-			position = 4,
-			section = audioSettingsSection
-	)
-	default String diarySoundPath() {
-		return "";
-	}
+	@ConfigItem(keyName = "notifyCombatHard", name = "Hard", description = "", position = 3, section = combatTiersSection)
+	default boolean notifyCombatHard() { return false; }
 
-	@ConfigItem(
-			keyName = "enablePetSound",
-			name = "Enable Pet Sound",
-			description = "",
-			position = 5,
-			section = audioSettingsSection
-	)
-	default boolean enablePetSound() {
-		return true;
-	}
+	@ConfigItem(keyName = "notifyCombatElite", name = "Elite", description = "", position = 4, section = combatTiersSection)
+	default boolean notifyCombatElite() { return true; }
 
-	@ConfigItem(
-			keyName = "petSoundPath",
-			name = "Custom Pet Sound Path",
-			description = "",
-			position = 6,
-			section = audioSettingsSection
-	)
-	default String petSoundPath() {
-		return "";
-	}
+	@ConfigItem(keyName = "notifyCombatMaster", name = "Master", description = "", position = 5, section = combatTiersSection)
+	default boolean notifyCombatMaster() { return true; }
+
+	@ConfigItem(keyName = "notifyCombatGrandmaster", name = "Grandmaster", description = "", position = 6, section = combatTiersSection)
+	default boolean notifyCombatGrandmaster() { return true; }
+
+	@ConfigItem(keyName = "notifyCombatTierCompletion", name = "Full Tier Completed", description = "", position = 7, section = combatTiersSection)
+	default boolean notifyCombatTierCompletion() { return true; }
+
+	@ConfigItem(keyName = "enableCollectionLogSound", name = "Enable Collection Log Sound", description = "", position = 1, section = audioSettingsSection)
+	default boolean enableCollectionLogSound() { return true; }
+
+	@ConfigItem(keyName = "collectionLogSoundPath", name = "Custom Collection Log Sound Path", description = "", position = 2, section = audioSettingsSection)
+	default String collectionLogSoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enableDiarySound", name = "Enable Diary Sound", description = "", position = 3, section = audioSettingsSection)
+	default boolean enableDiarySound() { return true; }
+
+	@ConfigItem(keyName = "diarySoundPath", name = "Custom Diary Sound Path", description = "", position = 4, section = audioSettingsSection)
+	default String diarySoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enablePetSound", name = "Enable Pet Sound", description = "", position = 5, section = audioSettingsSection)
+	default boolean enablePetSound() { return true; }
+
+	@ConfigItem(keyName = "petSoundPath", name = "Custom Pet Sound Path", description = "", position = 6, section = audioSettingsSection)
+	default String petSoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enableCombatTaskSound", name = "Enable Combat Task Sound", description = "", position = 7, section = audioSettingsSection)
+	default boolean enableCombatTaskSound() { return true; }
+
+	@ConfigItem(keyName = "combatTaskSoundPath", name = "Custom Combat Task Sound Path", description = "", position = 8, section = audioSettingsSection)
+	default String combatTaskSoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enableCombatTierSound", name = "Enable Full Combat Tier Sound", description = "", position = 9, section = audioSettingsSection)
+	default boolean enableCombatTierSound() { return true; }
+
+	@ConfigItem(keyName = "combatTierSoundPath", name = "Custom Combat Tier Sound Path", description = "", position = 10, section = audioSettingsSection)
+	default String combatTierSoundPath() { return ""; }
 }
