@@ -1,18 +1,13 @@
 package com.burot.event;
 
 import com.burot.BurotConfig;
+import com.burot.audio.AudioSource;
+import com.burot.audio.AudioSourceResolver;
+import com.burot.notifier.Notifier;
 import com.burot.render.ChatSegment;
 import com.burot.render.ChatboxImageGenerator;
-import com.burot.notifier.Notifier;
-import com.burot.audio.AudioSource;
-import com.burot.audio.DisabledAudioSource;
-import com.burot.audio.FileAudioSource;
-import com.burot.audio.InternalAudioSource;
-import net.runelite.api.ChatMessageType;
-import net.runelite.api.events.ChatMessage;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,17 +30,9 @@ public class AchievementDiaryEventProcessor extends GameEventProcessor {
         return "Achievement Diary";
     }
 
-    private AudioSource determineAudioSource() {
-        if (pluginConfiguration.universalSoundMute() || !pluginConfiguration.enableDiarySound()) {
-            return new DisabledAudioSource();
-        }
-
-        String customAudioPath = pluginConfiguration.diarySoundPath();
-        if (customAudioPath == null || customAudioPath.trim().isEmpty()) {
-            return new InternalAudioSource("/diary.wav");
-        }
-
-        return new FileAudioSource(customAudioPath);
+    @Override
+    protected boolean isEventEnabled() {
+        return pluginConfiguration.notifyAchievementDiary();
     }
 
     private boolean isTierConfiguredForNotification(String completedTier) {
@@ -65,31 +52,16 @@ public class AchievementDiaryEventProcessor extends GameEventProcessor {
 
     @Override
     public void simulateEventExecution(String activePlayerName, String activeClanName) {
-        if (!pluginConfiguration.notifyAchievementDiary()) {
+        if (!isEventEnabled()) {
             return;
         }
 
         String simulatedMessageContent = "Congratulations! You have completed all of the hard tasks in the Ardougne area.";
-        processRawMessage(simulatedMessageContent, activePlayerName, activeClanName);
+        processSanitizedMessage(simulatedMessageContent, activePlayerName, activeClanName, -1);
     }
 
     @Override
-    public void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName, String activeClanName, int currentTick) {
-        if (!pluginConfiguration.notifyAchievementDiary()) {
-            return;
-        }
-
-        ChatMessageType incomingMessageType = incomingChatMessage.getType();
-        if (incomingMessageType != ChatMessageType.GAMEMESSAGE && incomingMessageType != ChatMessageType.SPAM) {
-            return;
-        }
-
-        String rawMessageContent = incomingChatMessage.getMessage();
-        processRawMessage(rawMessageContent, activePlayerName, activeClanName);
-    }
-
-    private void processRawMessage(String rawMessageContent, String activePlayerName, String activeClanName) {
-        String sanitizedMessageContent = rawMessageContent.replaceAll("<[^>]+>", "");
+    protected void processSanitizedMessage(String sanitizedMessageContent, String activePlayerName, String activeClanName, int currentTick) {
         Matcher patternMatcher = DIARY_COMPLETION_PATTERN.matcher(sanitizedMessageContent);
 
         if (patternMatcher.find()) {
@@ -112,20 +84,20 @@ public class AchievementDiaryEventProcessor extends GameEventProcessor {
     private void executeNotificationSequence(String activePlayerName, String activeClanName, String targetTier, String targetArea) {
         String capitalizedTier = formatTierCapitalization(targetTier);
 
-        List<ChatSegment> notificationSegments = new ArrayList<>();
-
-        if (activeClanName != null && !activeClanName.isEmpty()) {
-            notificationSegments.add(new ChatSegment("[" + activeClanName + "] ", Color.BLUE));
-        }
-
-        notificationSegments.add(new ChatSegment(activePlayerName + " ", Color.BLACK));
+        List<ChatSegment> notificationSegments = buildPlayerClanPrefixSegments(activePlayerName, activeClanName);
         notificationSegments.add(new ChatSegment("completed the ", Color.BLACK));
         notificationSegments.add(new ChatSegment(capitalizedTier + " ", new Color(127, 0, 0)));
         notificationSegments.add(new ChatSegment(targetArea + " ", new Color(127, 0, 0)));
         notificationSegments.add(new ChatSegment("diary.", Color.BLACK));
 
         byte[] renderedImagePayload = imageGenerator.generateChatboxImage(notificationSegments);
-        AudioSource eventAudioSource = determineAudioSource();
+
+        AudioSource eventAudioSource = AudioSourceResolver.resolveAudioSource(
+                pluginConfiguration.universalSoundMute(),
+                pluginConfiguration.enableDiarySound(),
+                pluginConfiguration.diarySoundPath(),
+                "/diary.wav"
+        );
 
         triggerAllNotifiers("", eventAudioSource, renderedImagePayload);
     }
