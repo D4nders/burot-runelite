@@ -18,9 +18,9 @@ public abstract class GameEventProcessor {
 
     public abstract void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName);
 
-    protected void triggerAllNotifiers(String notificationText, String associatedSoundPath) {
+    protected void triggerAllNotifiers(String notificationText, String associatedSoundPath, byte[] generatedImageData) {
         for (Notifier currentNotifier : registeredNotifiers) {
-            currentNotifier.dispatchNotification(notificationText, associatedSoundPath);
+            currentNotifier.dispatchNotification(notificationText, associatedSoundPath, generatedImageData);
         }
     }
 }

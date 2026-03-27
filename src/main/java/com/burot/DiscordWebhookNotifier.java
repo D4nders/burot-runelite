@@ -1,7 +1,13 @@
 package com.burot;
 
-import com.google.gson.JsonObject;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import java.io.IOException;
 
@@ -16,24 +22,26 @@ public class DiscordWebhookNotifier implements Notifier {
     }
 
     @Override
-    public void dispatchNotification(String formattedEventText, String targetSoundFilePath) {
+    public void dispatchNotification(String formattedEventText, String targetSoundFilePath, byte[] generatedImageData) {
         String targetWebhookUrl = pluginConfiguration.webhookUrl();
 
         if (targetWebhookUrl == null || targetWebhookUrl.isEmpty()) {
             return;
         }
 
-        JsonObject discordPayload = new JsonObject();
-        discordPayload.addProperty("content", formattedEventText);
+        MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
 
-        RequestBody postBody = RequestBody.create(
-                MediaType.parse("application/json; charset=utf-8"),
-                discordPayload.toString()
-        );
+        if (formattedEventText != null && !formattedEventText.isEmpty()) {
+            requestBodyBuilder.addFormDataPart("content", formattedEventText);
+        }
+
+        if (generatedImageData != null) {
+            requestBodyBuilder.addFormDataPart("file", "notification.png", RequestBody.create(MediaType.parse("image/png"), generatedImageData));
+        }
 
         Request networkRequest = new Request.Builder()
                 .url(targetWebhookUrl)
-                .post(postBody)
+                .post(requestBodyBuilder.build())
                 .build();
 
         networkClient.newCall(networkRequest).enqueue(new Callback() {

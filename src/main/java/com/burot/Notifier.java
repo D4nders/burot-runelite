@@ -1,5 +1,5 @@
 package com.burot;
 
 public interface Notifier {
-    void dispatchNotification(String formattedEventText, String targetSoundFilePath);
+    void dispatchNotification(String formattedEventText, String targetSoundFilePath, byte[] generatedImageData);
 }
