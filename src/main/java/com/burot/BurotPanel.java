@@ -2,6 +2,8 @@ package com.burot;
 
 import net.runelite.api.Client;
 import net.runelite.api.Player;
+import net.runelite.api.clan.ClanChannel;
+import net.runelite.api.clan.ClanID;
 import net.runelite.client.ui.PluginPanel;
 
 import javax.swing.JButton;
@@ -26,7 +28,10 @@ public class BurotPanel extends PluginPanel {
                 Player localPlayerEntity = gameClient.getLocalPlayer();
                 String activePlayerName = (localPlayerEntity != null) ? localPlayerEntity.getName() : "DevPlayer";
 
-                processor.simulateEventExecution(activePlayerName);
+                ClanChannel activeClanChannel = gameClient.getClanChannel(ClanID.CLAN);
+                String activeClanName = (activeClanChannel != null) ? activeClanChannel.getName() : "";
+
+                processor.simulateEventExecution(activePlayerName, activeClanName);
             });
 
             buttonContainer.add(simulationButton);

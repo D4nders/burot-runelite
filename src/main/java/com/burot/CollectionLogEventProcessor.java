@@ -42,25 +42,13 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
     }
 
     @Override
-    public void simulateEventExecution(String activePlayerName) {
-        String simulatedItemName = "Rotten potato";
-        String simulatedProgress = " (291/1699)";
-
-        List<ChatSegment> notificationSegments = new ArrayList<>();
-        notificationSegments.add(new ChatSegment("[Burot] ", Color.BLUE));
-        notificationSegments.add(new ChatSegment(activePlayerName + " ", Color.BLACK));
-        notificationSegments.add(new ChatSegment("received a new collection log item: ", Color.BLACK));
-        notificationSegments.add(new ChatSegment(simulatedItemName, new Color(127, 0, 0)));
-        notificationSegments.add(new ChatSegment(simulatedProgress, Color.BLACK));
-
-        byte[] renderedImagePayload = imageGenerator.generateChatboxImage(notificationSegments);
-        AudioSource eventAudioSource = determineAudioSource();
-
-        triggerAllNotifiers("", eventAudioSource, renderedImagePayload);
+    public void simulateEventExecution(String activePlayerName, String activeClanName) {
+        String simulatedMessageContent = "New item added to your collection log: Rotten potato (291/1699)";
+        processRawMessage(simulatedMessageContent, activePlayerName, activeClanName);
     }
 
     @Override
-    public void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName) {
+    public void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName, String activeClanName) {
         if (!pluginConfiguration.notifyCollectionLog()) {
             return;
         }
@@ -71,6 +59,10 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
         }
 
         String rawMessageContent = incomingChatMessage.getMessage();
+        processRawMessage(rawMessageContent, activePlayerName, activeClanName);
+    }
+
+    private void processRawMessage(String rawMessageContent, String activePlayerName, String activeClanName) {
         String sanitizedMessageContent = rawMessageContent.replaceAll("<[^>]+>", "");
         Matcher patternMatcher = COLLECTION_LOG_DETECTION_PATTERN.matcher(sanitizedMessageContent);
 
@@ -86,7 +78,11 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
             }
 
             List<ChatSegment> notificationSegments = new ArrayList<>();
-            notificationSegments.add(new ChatSegment("[Burot] ", Color.BLUE));
+
+            if (activeClanName != null && !activeClanName.isEmpty()) {
+                notificationSegments.add(new ChatSegment("[" + activeClanName + "] ", Color.BLUE));
+            }
+
             notificationSegments.add(new ChatSegment(activePlayerName + " ", Color.BLACK));
             notificationSegments.add(new ChatSegment("received a new collection log item: ", Color.BLACK));
             notificationSegments.add(new ChatSegment(extractedItemName, new Color(127, 0, 0)));

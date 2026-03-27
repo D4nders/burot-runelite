@@ -1,10 +1,11 @@
 package com.burot;
 
 import com.google.inject.Provides;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
+import net.runelite.api.clan.ClanChannel;
+import net.runelite.api.clan.ClanID;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -15,6 +16,7 @@ import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import okhttp3.OkHttpClient;
 
+import javax.inject.Inject;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -25,8 +27,8 @@ import java.util.List;
 @PluginDescriptor(
 		name = "Burot"
 )
-public class BurotPlugin extends Plugin
-{
+public class BurotPlugin extends Plugin {
+
 	@Inject
 	private Client gameClient;
 
@@ -43,8 +45,7 @@ public class BurotPlugin extends Plugin
 	private NavigationButton devModeNavigationButton;
 
 	@Provides
-	BurotConfig provideConfig(ConfigManager configManager)
-	{
+	BurotConfig provideConfig(ConfigManager configManager) {
 		return configManager.getConfig(BurotConfig.class);
 	}
 
@@ -56,7 +57,8 @@ public class BurotPlugin extends Plugin
 		);
 
 		activeEventProcessors = Arrays.asList(
-				new CollectionLogEventProcessor(instantiatedNotifiers, pluginConfiguration)
+				new CollectionLogEventProcessor(instantiatedNotifiers, pluginConfiguration),
+				new AchievementDiaryEventProcessor(instantiatedNotifiers, pluginConfiguration)
 		);
 
 		initializeDevModeInterface();
@@ -112,8 +114,11 @@ public class BurotPlugin extends Plugin
 
 		String activePlayerName = localPlayerEntity.getName();
 
+		ClanChannel activeClanChannel = gameClient.getClanChannel(ClanID.CLAN);
+		String activeClanName = (activeClanChannel != null) ? activeClanChannel.getName() : "";
+
 		for (GameEventProcessor targetedProcessor : activeEventProcessors) {
-			targetedProcessor.evaluateIncomingEvent(incomingChatMessage, activePlayerName);
+			targetedProcessor.evaluateIncomingEvent(incomingChatMessage, activePlayerName, activeClanName);
 		}
 	}
 }

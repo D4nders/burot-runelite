@@ -13,9 +13,9 @@ public abstract class GameEventProcessor {
 
     public abstract String retrieveProcessorName();
 
-    public abstract void simulateEventExecution(String activePlayerName);
+    public abstract void simulateEventExecution(String activePlayerName, String activeClanName);
 
-    public abstract void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName);
+    public abstract void evaluateIncomingEvent(ChatMessage incomingChatMessage, String activePlayerName, String activeClanName);
 
     protected void triggerAllNotifiers(String notificationText, AudioSource eventAudioSource, byte[] generatedImageData) {
         for (Notifier currentNotifier : registeredNotifiers) {

@@ -22,6 +22,14 @@ public interface BurotConfig extends Config {
 	)
 	String audioSettingsSection = "audioSettingsSection";
 
+	@ConfigSection(
+			name = "Achievement Diary Tiers",
+			description = "",
+			position = 3,
+			closedByDefault = true
+	)
+	String diaryTiersSection = "diaryTiersSection";
+
 	@ConfigItem(
 			keyName = "devMode",
 			name = "Enable Developer Mode",
@@ -55,6 +63,61 @@ public interface BurotConfig extends Config {
 	}
 
 	@ConfigItem(
+			keyName = "notifyAchievementDiary",
+			name = "Notify Achievement Diary",
+			description = "",
+			position = 3,
+			section = discordNotificationSection
+	)
+	default boolean notifyAchievementDiary() {
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "notifyDiaryEasy",
+			name = "Easy",
+			description = "",
+			position = 1,
+			section = diaryTiersSection
+	)
+	default boolean notifyDiaryEasy() {
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "notifyDiaryMedium",
+			name = "Medium",
+			description = "",
+			position = 2,
+			section = diaryTiersSection
+	)
+	default boolean notifyDiaryMedium() {
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "notifyDiaryHard",
+			name = "Hard",
+			description = "",
+			position = 3,
+			section = diaryTiersSection
+	)
+	default boolean notifyDiaryHard() {
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "notifyDiaryElite",
+			name = "Elite",
+			description = "",
+			position = 4,
+			section = diaryTiersSection
+	)
+	default boolean notifyDiaryElite() {
+		return true;
+	}
+
+	@ConfigItem(
 			keyName = "enableCollectionLogSound",
 			name = "Enable Collection Log Sound",
 			description = "",
@@ -73,6 +136,28 @@ public interface BurotConfig extends Config {
 			section = audioSettingsSection
 	)
 	default String collectionLogSoundPath() {
+		return "";
+	}
+
+	@ConfigItem(
+			keyName = "enableDiarySound",
+			name = "Enable Diary Sound",
+			description = "",
+			position = 3,
+			section = audioSettingsSection
+	)
+	default boolean enableDiarySound() {
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "diarySoundPath",
+			name = "Custom Diary Sound Path",
+			description = "",
+			position = 4,
+			section = audioSettingsSection
+	)
+	default String diarySoundPath() {
 		return "";
 	}
 }
