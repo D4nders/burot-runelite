@@ -23,6 +23,12 @@ public interface BurotConfig extends Config {
 	@ConfigSection(name = "Personal Bests", description = "", position = 5, closedByDefault = true)
 	String pbSection = "pbSection";
 
+	@ConfigSection(name = "Deaths", description = "", position = 6, closedByDefault = true)
+	String deathSection = "deathSection";
+
+	@ConfigSection(name = "Kills", description = "", position = 7, closedByDefault = true)
+	String killSection = "killSection";
+
 	@ConfigItem(keyName = "devMode", name = "Enable Developer Mode", description = "", position = 0)
 	default boolean devMode() { return false; }
 
@@ -65,6 +71,12 @@ public interface BurotConfig extends Config {
 	@ConfigItem(keyName = "notifyNewRecord", name = "Notify New Records", description = "", position = 12, section = discordNotificationSection)
 	default boolean notifyNewRecord() { return true; }
 
+	@ConfigItem(keyName = "notifyDeath", name = "Notify Deaths", description = "", position = 13, section = discordNotificationSection)
+	default boolean notifyDeath() { return true; }
+
+	@ConfigItem(keyName = "notifyKill", name = "Notify Kills", description = "", position = 14, section = discordNotificationSection)
+	default boolean notifyKill() { return false; }
+
 	@ConfigItem(keyName = "notifyRecordMinigame", name = "Minigames", description = "", position = 1, section = pbSection)
 	default boolean notifyRecordMinigame() { return false; }
 
@@ -79,6 +91,18 @@ public interface BurotConfig extends Config {
 
 	@ConfigItem(keyName = "notifyRecordBosses", name = "Bosses", description = "", position = 5, section = pbSection)
 	default boolean notifyRecordBosses() { return false; }
+
+	@ConfigItem(keyName = "notifyDeathPlayer", name = "To Player (Value Lost)", description = "", position = 1, section = deathSection)
+	default boolean notifyDeathPlayer() { return true; }
+
+	@ConfigItem(keyName = "notifyDeathMonster", name = "To Monster", description = "", position = 2, section = deathSection)
+	default boolean notifyDeathMonster() { return false; }
+
+	@ConfigItem(keyName = "notifyKillPlayer", name = "Player Kill (Value Gained)", description = "", position = 1, section = killSection)
+	default boolean notifyKillPlayer() { return false; }
+
+	@ConfigItem(keyName = "notifyKillRaidBoss", name = "Last Raid Boss", description = "", position = 2, section = killSection)
+	default boolean notifyKillRaidBoss() { return false; }
 
 	@ConfigItem(keyName = "notifyDiaryEasy", name = "Easy", description = "", position = 1, section = diaryTiersSection)
 	default boolean notifyDiaryEasy() { return true; }
@@ -166,4 +190,16 @@ public interface BurotConfig extends Config {
 
 	@ConfigItem(keyName = "recordSoundPath", name = "Custom New Record Sound Path", description = "", position = 18, section = audioSettingsSection)
 	default String recordSoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enableDeathSound", name = "Enable Death Sound", description = "", position = 19, section = audioSettingsSection)
+	default boolean enableDeathSound() { return true; }
+
+	@ConfigItem(keyName = "deathSoundPath", name = "Custom Death Sound Path", description = "", position = 20, section = audioSettingsSection)
+	default String deathSoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enableKillSound", name = "Enable Kill Sound", description = "", position = 21, section = audioSettingsSection)
+	default boolean enableKillSound() { return true; }
+
+	@ConfigItem(keyName = "killSoundPath", name = "Custom Kill Sound Path", description = "", position = 22, section = audioSettingsSection)
+	default String killSoundPath() { return ""; }
 }
