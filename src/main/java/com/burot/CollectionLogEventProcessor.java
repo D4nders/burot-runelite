@@ -25,7 +25,9 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
 
     @Override
     public void simulateEventExecution(String activePlayerName) {
-        String discordFormattedMessage = activePlayerName + " obtained a new collection log item: **Simulated Dev Item**";
+        String simulatedItemName = "Rotten potato";
+        String generatedWikiUrl = "https://oldschool.runescape.wiki/w/" + simulatedItemName.replace(" ", "_");
+        String discordFormattedMessage = activePlayerName + " obtained a new collection log item: **[" + simulatedItemName + "](" + generatedWikiUrl + ")**";
         String configuredSoundPath = pluginConfiguration.collectionLogSoundPath();
 
         triggerAllNotifiers(discordFormattedMessage, configuredSoundPath);
@@ -47,7 +49,8 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
 
         if (patternMatcher.find()) {
             String extractedItemName = patternMatcher.group(1);
-            String discordFormattedMessage = activePlayerName + " obtained a new collection log item: **" + extractedItemName + "**";
+            String generatedWikiUrl = "https://oldschool.runescape.wiki/w/" + extractedItemName.replace(" ", "_");
+            String discordFormattedMessage = activePlayerName + " obtained a new collection log item: **[" + extractedItemName + "](" + generatedWikiUrl + ")**";
             String configuredSoundPath = pluginConfiguration.collectionLogSoundPath();
 
             triggerAllNotifiers(discordFormattedMessage, configuredSoundPath);
