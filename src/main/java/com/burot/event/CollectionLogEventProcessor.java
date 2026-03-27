@@ -40,7 +40,7 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
     }
 
     private AudioSource determineAudioSource() {
-        if (!pluginConfiguration.enableCollectionLogSound()) {
+        if (pluginConfiguration.universalSoundMute() || !pluginConfiguration.enableCollectionLogSound()) {
             return new DisabledAudioSource();
         }
 

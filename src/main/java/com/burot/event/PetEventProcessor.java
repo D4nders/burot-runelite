@@ -38,7 +38,7 @@ public class PetEventProcessor extends GameEventProcessor {
     }
 
     private AudioSource determineAudioSource() {
-        if (!pluginConfiguration.enablePetSound()) {
+        if (pluginConfiguration.universalSoundMute() || !pluginConfiguration.enablePetSound()) {
             return new DisabledAudioSource();
         }
 

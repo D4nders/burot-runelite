@@ -36,7 +36,7 @@ public class AchievementDiaryEventProcessor extends GameEventProcessor {
     }
 
     private AudioSource determineAudioSource() {
-        if (!pluginConfiguration.enableDiarySound()) {
+        if (pluginConfiguration.universalSoundMute() || !pluginConfiguration.enableDiarySound()) {
             return new DisabledAudioSource();
         }
 

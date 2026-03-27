@@ -23,6 +23,9 @@ public interface BurotConfig extends Config {
 	@ConfigItem(keyName = "devMode", name = "Enable Developer Mode", description = "", position = 0)
 	default boolean devMode() { return false; }
 
+	@ConfigItem(keyName = "universalSoundMute", name = "Universal Sound Mute", description = "", position = 0, section = audioSettingsSection)
+	default boolean universalSoundMute() { return false; }
+
 	@ConfigItem(keyName = "webhookUrl", name = "Discord Webhook URL", description = "", position = 1, section = discordNotificationSection)
 	default String webhookUrl() { return ""; }
 

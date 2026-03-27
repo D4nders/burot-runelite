@@ -37,7 +37,7 @@ public class CombatAchievementEventProcessor extends GameEventProcessor {
     }
 
     private AudioSource determineTaskAudioSource() {
-        if (!pluginConfiguration.enableCombatTaskSound()) {
+        if (pluginConfiguration.universalSoundMute() || !pluginConfiguration.enableCombatTaskSound()) {
             return new DisabledAudioSource();
         }
         String customAudioPath = pluginConfiguration.combatTaskSoundPath();
@@ -48,7 +48,7 @@ public class CombatAchievementEventProcessor extends GameEventProcessor {
     }
 
     private AudioSource determineTierAudioSource() {
-        if (!pluginConfiguration.enableCombatTierSound()) {
+        if (pluginConfiguration.universalSoundMute() || !pluginConfiguration.enableCombatTierSound()) {
             return new DisabledAudioSource();
         }
         String customAudioPath = pluginConfiguration.combatTierSoundPath();

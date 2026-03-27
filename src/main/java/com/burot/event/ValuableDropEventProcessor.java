@@ -39,7 +39,7 @@ public class ValuableDropEventProcessor extends GameEventProcessor {
     }
 
     private AudioSource determineAudioSource() {
-        if (!pluginConfiguration.enableValuableDropSound()) {
+        if (pluginConfiguration.universalSoundMute() || !pluginConfiguration.enableValuableDropSound()) {
             return new DisabledAudioSource();
         }
 
