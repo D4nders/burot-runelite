@@ -1,35 +1,29 @@
 package com.burot.notifier;
 
 import com.burot.audio.AudioSource;
+import net.runelite.client.audio.AudioPlayer;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import java.io.InputStream;
 
 public class AudioNotifier implements Notifier {
 
-    private Clip activePlaybackClip;
+    private final AudioPlayer audioPlayer;
+
+    public AudioNotifier(AudioPlayer audioPlayer) {
+        this.audioPlayer = audioPlayer;
+    }
 
     @Override
     public void dispatchNotification(String formattedEventText, AudioSource targetAudioSource, byte[] generatedImageData) {
-        if (targetAudioSource == null) {
+        if (targetAudioSource == null || audioPlayer == null) {
             return;
         }
 
         try {
-            AudioInputStream activeAudioStream = targetAudioSource.retrieveAudioStream();
+            InputStream activeAudioStream = targetAudioSource.retrieveAudioStream();
 
             if (activeAudioStream != null) {
-                if (activePlaybackClip != null) {
-                    if (activePlaybackClip.isRunning()) {
-                        activePlaybackClip.stop();
-                    }
-                    activePlaybackClip.close();
-                }
-
-                activePlaybackClip = AudioSystem.getClip();
-                activePlaybackClip.open(activeAudioStream);
-                activePlaybackClip.start();
+                audioPlayer.play(activeAudioStream, 0f);
             }
         } catch (Exception ignoredException) {
         }

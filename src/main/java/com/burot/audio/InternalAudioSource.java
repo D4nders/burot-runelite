@@ -2,8 +2,6 @@ package com.burot.audio;
 
 import com.burot.BurotPlugin;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 
@@ -16,11 +14,11 @@ public class InternalAudioSource implements AudioSource {
     }
 
     @Override
-    public AudioInputStream retrieveAudioStream() {
+    public InputStream retrieveAudioStream() {
         try {
             InputStream rawResourceStream = BurotPlugin.class.getResourceAsStream(resourceLocation);
             if (rawResourceStream != null) {
-                return AudioSystem.getAudioInputStream(new BufferedInputStream(rawResourceStream));
+                return new BufferedInputStream(rawResourceStream);
             }
         } catch (Exception ignoredException) {
         }

@@ -1,7 +1,7 @@
 package com.burot.audio;
 
-import javax.sound.sampled.AudioInputStream;
+import java.io.InputStream;
 
 public interface AudioSource {
-    AudioInputStream retrieveAudioStream();
+    InputStream retrieveAudioStream();
 }

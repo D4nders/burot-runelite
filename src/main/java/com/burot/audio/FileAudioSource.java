@@ -1,8 +1,8 @@
 package com.burot.audio;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 public class FileAudioSource implements AudioSource {
 
@@ -13,11 +13,11 @@ public class FileAudioSource implements AudioSource {
     }
 
     @Override
-    public AudioInputStream retrieveAudioStream() {
+    public InputStream retrieveAudioStream() {
         try {
             File targetAudioFile = new File(fileSystemPath);
             if (targetAudioFile.exists()) {
-                return AudioSystem.getAudioInputStream(targetAudioFile);
+                return new FileInputStream(targetAudioFile);
             }
         } catch (Exception ignoredException) {
         }

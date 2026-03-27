@@ -1,11 +1,11 @@
 package com.burot.audio;
 
-import javax.sound.sampled.AudioInputStream;
+import java.io.InputStream;
 
 public class DisabledAudioSource implements AudioSource {
 
     @Override
-    public AudioInputStream retrieveAudioStream() {
+    public InputStream retrieveAudioStream() {
         return null;
     }
 }

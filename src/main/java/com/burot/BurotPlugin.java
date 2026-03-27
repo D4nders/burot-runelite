@@ -21,6 +21,7 @@ import net.runelite.api.Player;
 import net.runelite.api.clan.ClanChannel;
 import net.runelite.api.clan.ClanID;
 import net.runelite.api.events.ChatMessage;
+import net.runelite.client.audio.AudioPlayer;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -55,6 +56,9 @@ public class BurotPlugin extends Plugin {
 	@Inject
 	private ClientToolbar clientToolbar;
 
+	@Inject
+	private AudioPlayer audioPlayer;
+
 	private List<GameEventProcessor> activeEventProcessors;
 	private NavigationButton devModeNavigationButton;
 
@@ -69,7 +73,7 @@ public class BurotPlugin extends Plugin {
 
 		List<Notifier> instantiatedNotifiers = Arrays.asList(
 				new DiscordWebhookNotifier(pluginConfiguration, sharedNetworkClient),
-				new AudioNotifier()
+				new AudioNotifier(audioPlayer)
 		);
 
 		activeEventProcessors = Arrays.asList(
