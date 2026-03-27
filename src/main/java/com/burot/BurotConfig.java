@@ -50,6 +50,15 @@ public interface BurotConfig extends Config {
 	@ConfigItem(keyName = "notifyQuest", name = "Notify Quest Completion", description = "", position = 8, section = discordNotificationSection)
 	default boolean notifyQuest() { return true; }
 
+	@ConfigItem(keyName = "notifyLevelUp", name = "Notify Level Up", description = "", position = 9, section = discordNotificationSection)
+	default boolean notifyLevelUp() { return true; }
+
+	@ConfigItem(keyName = "skillLevelThreshold", name = "Skill Level Threshold", description = "", position = 10, section = discordNotificationSection)
+	default int skillLevelThreshold() { return 99; }
+
+	@ConfigItem(keyName = "combatLevelThreshold", name = "Combat Level Threshold", description = "", position = 11, section = discordNotificationSection)
+	default int combatLevelThreshold() { return 126; }
+
 	@ConfigItem(keyName = "notifyDiaryEasy", name = "Easy", description = "", position = 1, section = diaryTiersSection)
 	default boolean notifyDiaryEasy() { return true; }
 
@@ -124,4 +133,10 @@ public interface BurotConfig extends Config {
 
 	@ConfigItem(keyName = "questSoundPath", name = "Custom Quest Sound Path", description = "", position = 14, section = audioSettingsSection)
 	default String questSoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enableLevelUpSound", name = "Enable Level Up Sound", description = "", position = 15, section = audioSettingsSection)
+	default boolean enableLevelUpSound() { return true; }
+
+	@ConfigItem(keyName = "levelUpSoundPath", name = "Custom Level Up Sound Path", description = "", position = 16, section = audioSettingsSection)
+	default String levelUpSoundPath() { return ""; }
 }
