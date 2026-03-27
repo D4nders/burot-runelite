@@ -1,5 +1,6 @@
 package com.burot;
 
+import com.burot.event.GameEventProcessor;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
 import net.runelite.api.clan.ClanChannel;

@@ -1,5 +1,13 @@
-package com.burot;
+package com.burot.event;
 
+import com.burot.BurotConfig;
+import com.burot.render.ChatSegment;
+import com.burot.render.ChatboxImageGenerator;
+import com.burot.notifier.Notifier;
+import com.burot.audio.AudioSource;
+import com.burot.audio.DisabledAudioSource;
+import com.burot.audio.FileAudioSource;
+import com.burot.audio.InternalAudioSource;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.events.ChatMessage;
 

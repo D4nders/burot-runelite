@@ -1,4 +1,6 @@
-package com.burot;
+package com.burot.audio;
+
+import com.burot.BurotPlugin;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

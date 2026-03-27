@@ -1,4 +1,4 @@
-package com.burot;
+package com.burot.render;
 
 import java.awt.Color;
 

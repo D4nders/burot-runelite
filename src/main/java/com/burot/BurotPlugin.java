@@ -1,5 +1,12 @@
 package com.burot;
 
+import com.burot.event.AchievementDiaryEventProcessor;
+import com.burot.event.CollectionLogEventProcessor;
+import com.burot.event.GameEventProcessor;
+import com.burot.event.PetEventProcessor;
+import com.burot.notifier.AudioNotifier;
+import com.burot.notifier.DiscordWebhookNotifier;
+import com.burot.notifier.Notifier;
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
