@@ -20,6 +20,9 @@ public interface BurotConfig extends Config {
 	@ConfigSection(name = "Combat Achievement Tiers", description = "", position = 4, closedByDefault = true)
 	String combatTiersSection = "combatTiersSection";
 
+	@ConfigSection(name = "Personal Bests", description = "", position = 5, closedByDefault = true)
+	String pbSection = "pbSection";
+
 	@ConfigItem(keyName = "devMode", name = "Enable Developer Mode", description = "", position = 0)
 	default boolean devMode() { return false; }
 
@@ -58,6 +61,24 @@ public interface BurotConfig extends Config {
 
 	@ConfigItem(keyName = "combatLevelThreshold", name = "Combat Level Threshold", description = "", position = 11, section = discordNotificationSection)
 	default int combatLevelThreshold() { return 126; }
+
+	@ConfigItem(keyName = "notifyNewRecord", name = "Notify New Records", description = "", position = 12, section = discordNotificationSection)
+	default boolean notifyNewRecord() { return true; }
+
+	@ConfigItem(keyName = "notifyRecordMinigame", name = "Minigames", description = "", position = 1, section = pbSection)
+	default boolean notifyRecordMinigame() { return false; }
+
+	@ConfigItem(keyName = "notifyRecordAgility", name = "Agility Courses", description = "", position = 2, section = pbSection)
+	default boolean notifyRecordAgility() { return false; }
+
+	@ConfigItem(keyName = "notifyRecordRaids", name = "Raids", description = "", position = 3, section = pbSection)
+	default boolean notifyRecordRaids() { return true; }
+
+	@ConfigItem(keyName = "notifyRecordBarracuda", name = "Barracuda Trials", description = "", position = 4, section = pbSection)
+	default boolean notifyRecordBarracuda() { return false; }
+
+	@ConfigItem(keyName = "notifyRecordBosses", name = "Bosses", description = "", position = 5, section = pbSection)
+	default boolean notifyRecordBosses() { return false; }
 
 	@ConfigItem(keyName = "notifyDiaryEasy", name = "Easy", description = "", position = 1, section = diaryTiersSection)
 	default boolean notifyDiaryEasy() { return true; }
@@ -139,4 +160,10 @@ public interface BurotConfig extends Config {
 
 	@ConfigItem(keyName = "levelUpSoundPath", name = "Custom Level Up Sound Path", description = "", position = 16, section = audioSettingsSection)
 	default String levelUpSoundPath() { return ""; }
+
+	@ConfigItem(keyName = "enableRecordSound", name = "Enable New Record Sound", description = "", position = 17, section = audioSettingsSection)
+	default boolean enableRecordSound() { return true; }
+
+	@ConfigItem(keyName = "recordSoundPath", name = "Custom New Record Sound Path", description = "", position = 18, section = audioSettingsSection)
+	default String recordSoundPath() { return ""; }
 }

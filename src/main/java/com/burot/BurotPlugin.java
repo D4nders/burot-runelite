@@ -5,6 +5,7 @@ import com.burot.event.CollectionLogEventProcessor;
 import com.burot.event.CombatAchievementEventProcessor;
 import com.burot.event.GameEventProcessor;
 import com.burot.event.LevelUpEventProcessor;
+import com.burot.event.NewRecordEventProcessor;
 import com.burot.event.PetEventProcessor;
 import com.burot.event.QuestEventProcessor;
 import com.burot.event.ValuableDropEventProcessor;
@@ -76,7 +77,8 @@ public class BurotPlugin extends Plugin {
 				new CombatAchievementEventProcessor(instantiatedNotifiers, pluginConfiguration),
 				new ValuableDropEventProcessor(instantiatedNotifiers, pluginConfiguration, sharedEventState),
 				new QuestEventProcessor(instantiatedNotifiers, pluginConfiguration),
-				new LevelUpEventProcessor(instantiatedNotifiers, pluginConfiguration)
+				new LevelUpEventProcessor(instantiatedNotifiers, pluginConfiguration),
+				new NewRecordEventProcessor(instantiatedNotifiers, pluginConfiguration)
 		);
 
 		initializeDevModeInterface();
