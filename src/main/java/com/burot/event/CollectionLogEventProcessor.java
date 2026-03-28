@@ -10,6 +10,7 @@ import com.burot.render.ChatSegment;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,6 +78,13 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
         }
     }
 
+    private String resolveAudioResourcePath() {
+        if (ThreadLocalRandom.current().nextInt(50) == 0) {
+            return "/collectionlog_4.wav";
+        }
+        return "/collectionlog_" + (ThreadLocalRandom.current().nextInt(3) + 1) + ".wav";
+    }
+
     private void executeNotificationSequence(String activePlayerName, String activeClanName, String extractedItemName, String extractedProgress) {
         List<ChatSegment> notificationSegments = buildPlayerClanPrefixSegments(activePlayerName, activeClanName);
         notificationSegments.add(new ChatSegment("received a new collection log item: ", Color.BLACK));
@@ -92,7 +100,7 @@ public class CollectionLogEventProcessor extends GameEventProcessor {
                 pluginConfiguration.universalSoundMute(),
                 pluginConfiguration.enableCollectionLogSound(),
                 pluginConfiguration.collectionLogSoundPath(),
-                "/collectionlog.wav"
+                resolveAudioResourcePath()
         );
 
         triggerAllNotifiers("", eventAudioSource, renderedImagePayload);

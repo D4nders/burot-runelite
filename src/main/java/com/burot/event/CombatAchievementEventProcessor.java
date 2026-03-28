@@ -120,7 +120,7 @@ public class CombatAchievementEventProcessor extends GameEventProcessor {
                 pluginConfiguration.universalSoundMute(),
                 pluginConfiguration.enableCombatTaskSound(),
                 pluginConfiguration.combatTaskSoundPath(),
-                "/combattask.wav"
+                "/combatachived.wav"
         );
 
         triggerAllNotifiers("", eventAudioSource, renderedImagePayload);
@@ -140,7 +140,7 @@ public class CombatAchievementEventProcessor extends GameEventProcessor {
                 pluginConfiguration.universalSoundMute(),
                 pluginConfiguration.enableCombatTierSound(),
                 pluginConfiguration.combatTierSoundPath(),
-                "/combattier.wav"
+                "/combatachived.wav"
         );
 
         triggerAllNotifiers("", eventAudioSource, renderedImagePayload);

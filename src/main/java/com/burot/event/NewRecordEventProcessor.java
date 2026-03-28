@@ -9,6 +9,7 @@ import com.burot.render.ChatboxImageGenerator;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -128,6 +129,13 @@ public class NewRecordEventProcessor extends GameEventProcessor {
         }
     }
 
+    private String resolveAudioResourcePath() {
+        if (ThreadLocalRandom.current().nextInt(200) == 0) {
+            return "/record_2.wav";
+        }
+        return "/record_1.wav";
+    }
+
     private void executeNotificationSequence(String activePlayerName, String activeClanName, String targetActivity, String targetTime) {
         List<ChatSegment> notificationSegments = buildPlayerClanPrefixSegments(activePlayerName, activeClanName);
         notificationSegments.add(new ChatSegment("has achieved a new ", Color.BLACK));
@@ -141,7 +149,7 @@ public class NewRecordEventProcessor extends GameEventProcessor {
                 pluginConfiguration.universalSoundMute(),
                 pluginConfiguration.enableRecordSound(),
                 pluginConfiguration.recordSoundPath(),
-                "/record.wav"
+                resolveAudioResourcePath()
         );
 
         triggerAllNotifiers("", eventAudioSource, renderedImagePayload);
